@@ -18,8 +18,8 @@ interface LoginProps {
 
 function Login({ onLogin }: LoginProps) {
   const [formData, setFormData] = useState<FormData>({
-    email: '',
-    password: ''
+    email: process.env.NODE_ENV === 'development' ? 'aaa@bbb.cc' : '',
+    password: process.env.NODE_ENV === 'development' ? '123456' : ''
   })
   const [errors, setErrors] = useState<Errors>({})
   const [isLoading, setIsLoading] = useState<boolean>(false)

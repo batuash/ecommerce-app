@@ -109,6 +109,25 @@
   transform: translateY(0);
 }
 
+.add-to-cart-btn.in-cart {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.in-cart-indicator {
+  color: #059669;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0.5rem 0 0 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.in-cart-indicator::before {
+  content: '✓';
+  font-weight: bold;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .product-list-container {

@@ -3,6 +3,8 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import Login from './Login.tsx'
 import ProductList from './ProductList.tsx'
+import Cart from './Cart.tsx'
+import { CartProvider, useCart } from './CartContext'
 import './App.css'
 
 interface User {
@@ -10,9 +12,11 @@ interface User {
   password: string
 }
 
-function App() {
+function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
   const [user, setUser] = useState<User | null>(null)
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
+  const { state } = useCart()
 
   const handleLogin = (loginData: User): void => {
     // In a real app, you would validate credentials with your backend
@@ -41,6 +45,14 @@ function App() {
             Logout
           </button>
         </div>
+        <div className="cart-info">
+          <button 
+            className="cart-button"
+            onClick={() => setIsCartOpen(true)}
+          >
+            🛒 Cart ({state.itemCount})
+          </button>
+        </div>
       </div>
       
       <div className="main-content">
@@ -58,7 +70,17 @@ function App() {
         
         <ProductList />
       </div>
+
+      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
+  )
+}
+
+function App() {
+  return (
+    <CartProvider>
+      <AppContent />
+    </CartProvider>
   )
 }
 
