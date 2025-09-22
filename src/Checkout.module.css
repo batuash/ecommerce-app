@@ -1,4 +1,4 @@
-.checkout-overlay {
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +12,7 @@
   padding: 20px;
 }
 
-.checkout-container {
+.container {
   background: white;
   border-radius: 12px;
   width: 100%;
@@ -24,7 +24,7 @@
   flex-direction: column;
 }
 
-.checkout-header {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,14 +33,14 @@
   margin-bottom: 24px;
 }
 
-.checkout-header h2 {
+.header h2 {
   margin: 0;
   font-size: 24px;
   font-weight: 600;
   color: #1f2937;
 }
 
-.close-button {
+.closeButton {
   background: none;
   border: none;
   font-size: 24px;
@@ -51,12 +51,12 @@
   transition: all 0.2s;
 }
 
-.close-button:hover {
+.closeButton:hover {
   background-color: #f3f4f6;
   color: #374151;
 }
 
-.checkout-steps {
+.steps {
   display: flex;
   justify-content: center;
   margin-bottom: 32px;
@@ -87,7 +87,7 @@
   background-color: #10b981;
 }
 
-.step-number {
+.stepNumber {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -104,77 +104,77 @@
   transition: all 0.3s;
 }
 
-.step.active .step-number {
+.step.active .stepNumber {
   background-color: #3b82f6;
   color: white;
 }
 
-.step.completed .step-number {
+.step.completed .stepNumber {
   background-color: #10b981;
   color: white;
 }
 
-.step.completed .step-number::before {
+.step.completed .stepNumber::before {
   content: '✓';
   font-size: 16px;
 }
 
-.step-label {
+.stepLabel {
   font-size: 12px;
   color: #6b7280;
   text-align: center;
   font-weight: 500;
 }
 
-.step.active .step-label {
+.step.active .stepLabel {
   color: #3b82f6;
   font-weight: 600;
 }
 
-.step.completed .step-label {
+.step.completed .stepLabel {
   color: #10b981;
   font-weight: 600;
 }
 
-.checkout-content {
+.content {
   flex: 1;
   padding: 0 24px;
   margin-bottom: 24px;
 }
 
-.checkout-content h3 {
+.content h3 {
   margin: 0 0 24px 0;
   font-size: 20px;
   font-weight: 600;
   color: #1f2937;
 }
 
-.form-row {
+.formRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin-bottom: 16px;
 }
 
-.form-row.three-columns {
+.formRow.threeColumns {
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-.form-group {
+.formGroup {
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
 }
 
-.form-group label {
+.formGroup label {
   font-size: 14px;
   font-weight: 500;
   color: #374151;
   margin-bottom: 6px;
 }
 
-.form-group input,
-.form-group select {
+.formGroup input,
+.formGroup select {
   padding: 12px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
@@ -183,48 +183,48 @@
   background-color: white;
 }
 
-.form-group input:focus,
-.form-group select:focus {
+.formGroup input:focus,
+.formGroup select:focus {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.form-group input.error {
+.formGroup input.error {
   border-color: #ef4444;
 }
 
-.form-group input.error:focus {
+.formGroup input.error:focus {
   border-color: #ef4444;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
-.error-message {
+.errorMessage {
   color: #ef4444;
   font-size: 12px;
   margin-top: 4px;
 }
 
-.review-section {
+.reviewSection {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.order-summary {
+.orderSummary {
   background-color: #f9fafb;
   border-radius: 8px;
   padding: 20px;
 }
 
-.order-summary h4 {
+.orderSummary h4 {
   margin: 0 0 16px 0;
   font-size: 16px;
   font-weight: 600;
   color: #1f2937;
 }
 
-.order-item {
+.orderItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -232,26 +232,26 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
-.order-item:last-child {
+.orderItem:last-child {
   border-bottom: none;
 }
 
-.item-name {
+.itemName {
   font-weight: 500;
   color: #374151;
 }
 
-.item-quantity {
+.itemQuantity {
   color: #6b7280;
   font-size: 14px;
 }
 
-.item-price {
+.itemPrice {
   font-weight: 600;
   color: #1f2937;
 }
 
-.order-total {
+.orderTotal {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -263,42 +263,42 @@
   color: #1f2937;
 }
 
-.shipping-summary,
-.payment-summary {
+.shippingSummary,
+.paymentSummary {
   background-color: #f9fafb;
   border-radius: 8px;
   padding: 20px;
 }
 
-.shipping-summary h4,
-.payment-summary h4 {
+.shippingSummary h4,
+.paymentSummary h4 {
   margin: 0 0 12px 0;
   font-size: 16px;
   font-weight: 600;
   color: #1f2937;
 }
 
-.shipping-summary p,
-.payment-summary p {
+.shippingSummary p,
+.paymentSummary p {
   margin: 0;
   color: #374151;
   line-height: 1.5;
 }
 
-.checkout-footer {
+.footer {
   padding: 24px;
   border-top: 1px solid #e5e7eb;
   background-color: #f9fafb;
   border-radius: 0 0 12px 12px;
 }
 
-.checkout-actions {
+.actions {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
 }
 
-.checkout-actions button {
+.actions button {
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 14px;
@@ -308,67 +308,67 @@
   border: none;
 }
 
-.cancel-btn {
+.cancelBtn {
   background-color: #f3f4f6;
   color: #374151;
 }
 
-.cancel-btn:hover {
+.cancelBtn:hover {
   background-color: #e5e7eb;
 }
 
-.back-btn {
+.backBtn {
   background-color: #f3f4f6;
   color: #374151;
 }
 
-.back-btn:hover {
+.backBtn:hover {
   background-color: #e5e7eb;
 }
 
-.next-btn {
+.nextBtn {
   background-color: #3b82f6;
   color: white;
 }
 
-.next-btn:hover {
+.nextBtn:hover {
   background-color: #2563eb;
 }
 
-.place-order-btn {
+.placeOrderBtn {
   background-color: #10b981;
   color: white;
   font-weight: 600;
 }
 
-.place-order-btn:hover:not(:disabled) {
+.placeOrderBtn:hover:not(:disabled) {
   background-color: #059669;
 }
 
-.place-order-btn:disabled {
+.placeOrderBtn:disabled {
   background-color: #9ca3af;
   cursor: not-allowed;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
-  .checkout-overlay {
+  .overlay {
     padding: 10px;
   }
   
-  .checkout-container {
+  .container {
     max-height: 95vh;
   }
   
-  .form-row {
+  .formRow {
     grid-template-columns: 1fr;
   }
   
-  .checkout-actions {
+  .actions {
     flex-direction: column;
   }
   
-  .checkout-actions button {
+  .actions button {
     width: 100%;
   }
   

@@ -7,7 +7,7 @@ import Cart from './Cart.tsx'
 import Checkout from './Checkout.tsx'
 import OrderConfirmation from './OrderConfirmation.tsx'
 import { CartProvider, useCart } from './CartContext'
-import './App.css'
+import styles from './App.module.css'
 
 interface User {
   email: string
@@ -56,16 +56,16 @@ function AppContent() {
   // Show main app content if logged in
   return (
     <>
-      <div className="app-header">
-        <div className="user-info">
+      <div className={styles.appHeader}>
+        <div className={styles.userInfo}>
           <span>Welcome, {user?.email}</span>
-          <button onClick={handleLogout} className="logout-button">
+          <button onClick={handleLogout} className={styles.logoutButton}>
             Logout
           </button>
         </div>
-        <div className="cart-info">
+        <div className={styles.cartInfo}>
           <button 
-            className="cart-button"
+            className={styles.cartButton}
             onClick={() => setIsCartOpen(true)}
           >
             🛒 Cart ({state.itemCount})
@@ -73,8 +73,8 @@ function AppContent() {
         </div>
       </div>
       
-      <div className="main-content">
-        <div className="welcome-section">
+      <div className={styles.mainContent}>
+        <div className={styles.welcomeSection}>
           <div>
             <a href="https://vite.dev" target="_blank">
               <img src={viteLogo} className="logo" alt="Vite logo" />

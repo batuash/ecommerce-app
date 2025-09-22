@@ -1,5 +1,5 @@
 import React from 'react'
-import './OrderConfirmation.css'
+import styles from './OrderConfirmation.module.css'
 
 interface OrderData {
   orderId: string
@@ -53,43 +53,43 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ orderData, onClos
   }
 
   return (
-    <div className="order-confirmation-overlay">
-      <div className="order-confirmation-container">
-        <div className="confirmation-header">
-          <div className="success-icon">✓</div>
+    <div className={styles.overlay}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div className={styles.successIcon}>✓</div>
           <h2>Order Confirmed!</h2>
-          <p className="order-id">Order ID: {orderData.orderId}</p>
+          <p className={styles.orderId}>Order ID: {orderData.orderId}</p>
         </div>
 
-        <div className="confirmation-content">
-          <div className="confirmation-message">
+        <div className={styles.content}>
+          <div className={styles.message}>
             <p>Thank you for your order, {orderData.shippingInfo.firstName}!</p>
             <p>We've sent a confirmation email to {orderData.shippingInfo.email}</p>
             <p>Your order was placed on {formatDate(orderData.timestamp)}</p>
           </div>
 
-          <div className="order-details">
-            <div className="order-items">
+          <div className={styles.details}>
+            <div className={styles.orderItems}>
               <h3>Order Items</h3>
               {orderData.items.map((item) => (
-                <div key={item.id} className="order-item">
-                  <div className="item-info">
-                    <span className="item-name">{item.name}</span>
-                    <span className="item-quantity">Quantity: {item.quantity}</span>
+                <div key={item.id} className={styles.orderItem}>
+                  <div className={styles.itemInfo}>
+                    <span className={styles.itemName}>{item.name}</span>
+                    <span className={styles.itemQuantity}>Quantity: {item.quantity}</span>
                   </div>
-                  <span className="item-price">{formatPrice(item.price * item.quantity)}</span>
+                  <span className={styles.itemPrice}>{formatPrice(item.price * item.quantity)}</span>
                 </div>
               ))}
               
-              <div className="order-total">
-                <span className="total-label">Total:</span>
-                <span className="total-amount">{formatPrice(orderData.total)}</span>
+              <div className={styles.orderTotal}>
+                <span className={styles.totalLabel}>Total:</span>
+                <span className={styles.totalAmount}>{formatPrice(orderData.total)}</span>
               </div>
             </div>
 
-            <div className="shipping-details">
+            <div className={styles.shippingDetails}>
               <h3>Shipping Address</h3>
-              <div className="address-info">
+              <div className={styles.addressInfo}>
                 <p>{orderData.shippingInfo.firstName} {orderData.shippingInfo.lastName}</p>
                 <p>{orderData.shippingInfo.address}</p>
                 <p>{orderData.shippingInfo.city}, {orderData.shippingInfo.state} {orderData.shippingInfo.zipCode}</p>
@@ -97,16 +97,16 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ orderData, onClos
               </div>
             </div>
 
-            <div className="payment-details">
+            <div className={styles.paymentDetails}>
               <h3>Payment Method</h3>
-              <div className="payment-info">
+              <div className={styles.paymentInfo}>
                 <p>Card ending in {orderData.paymentInfo.cardNumber.slice(-4)}</p>
                 <p>{orderData.paymentInfo.cardholderName}</p>
               </div>
             </div>
           </div>
 
-          <div className="next-steps">
+          <div className={styles.nextSteps}>
             <h3>What's Next?</h3>
             <ul>
               <li>You'll receive an email confirmation shortly</li>
@@ -117,8 +117,8 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({ orderData, onClos
           </div>
         </div>
 
-        <div className="confirmation-footer">
-          <button className="continue-shopping-btn" onClick={onClose}>
+        <div className={styles.footer}>
+          <button className={styles.continueShoppingBtn} onClick={onClose}>
             Continue Shopping
           </button>
         </div>

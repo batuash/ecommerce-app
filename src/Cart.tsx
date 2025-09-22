@@ -1,6 +1,6 @@
 import React from 'react'
 import { useCart } from './CartContext'
-import './Cart.css'
+import styles from './Cart.module.css'
 
 interface CartProps {
   isOpen: boolean
@@ -21,56 +21,56 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, onCheckout }) => {
   if (!isOpen) return null
 
   return (
-    <div className="cart-overlay" onClick={onClose}>
-      <div className="cart-container" onClick={(e) => e.stopPropagation()}>
-        <div className="cart-header">
+    <div className={styles.overlay} onClick={onClose}>
+      <div className={styles.container} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.header}>
           <h2>Shopping Cart ({state.itemCount} items)</h2>
-          <button className="close-button" onClick={onClose}>
+          <button className={styles.closeButton} onClick={onClose}>
             ×
           </button>
         </div>
 
         {state.items.length === 0 ? (
-          <div className="empty-cart">
+          <div className={styles.emptyCart}>
             <p>Your cart is empty</p>
-            <button className="continue-shopping" onClick={onClose}>
+            <button className={styles.continueShopping} onClick={onClose}>
               Continue Shopping
             </button>
           </div>
         ) : (
           <>
-            <div className="cart-items">
+            <div className={styles.items}>
               {state.items.map((item) => (
-                <div key={item.id} className="cart-item">
-                  <div className="item-info">
+                <div key={item.id} className={styles.item}>
+                  <div className={styles.itemInfo}>
                     <h3>{item.name}</h3>
-                    <p className="item-price">{formatPrice(item.price)}</p>
+                    <p className={styles.itemPrice}>{formatPrice(item.price)}</p>
                   </div>
                   
-                  <div className="item-controls">
-                    <div className="quantity-controls">
+                  <div className={styles.itemControls}>
+                    <div className={styles.quantityControls}>
                       <button
-                        className="quantity-btn"
+                        className={styles.quantityBtn}
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         disabled={item.quantity <= 1}
                       >
                         -
                       </button>
-                      <span className="quantity">{item.quantity}</span>
+                      <span className={styles.quantity}>{item.quantity}</span>
                       <button
-                        className="quantity-btn"
+                        className={styles.quantityBtn}
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       >
                         +
                       </button>
                     </div>
                     
-                    <div className="item-total">
+                    <div className={styles.itemTotal}>
                       {formatPrice(item.price * item.quantity)}
                     </div>
                     
                     <button
-                      className="remove-btn"
+                      className={styles.removeBtn}
                       onClick={() => removeItem(item.id)}
                     >
                       Remove
@@ -80,17 +80,17 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, onCheckout }) => {
               ))}
             </div>
 
-            <div className="cart-footer">
-              <div className="cart-total">
+            <div className={styles.footer}>
+              <div className={styles.total}>
                 <span>Total:</span>
-                <span className="total-amount">{formatPrice(state.total)}</span>
+                <span className={styles.totalAmount}>{formatPrice(state.total)}</span>
               </div>
               
-              <div className="cart-actions">
-                <button className="clear-cart-btn" onClick={clearCart}>
+              <div className={styles.actions}>
+                <button className={styles.clearCartBtn} onClick={clearCart}>
                   Clear Cart
                 </button>
-                <button className="checkout-btn" onClick={onCheckout}>
+                <button className={styles.checkoutBtn} onClick={onCheckout}>
                   Checkout
                 </button>
               </div>

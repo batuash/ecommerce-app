@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useCart, CartState } from './CartContext'
-import './Checkout.css'
+import styles from './Checkout.module.css'
 import { delay } from './utils'
 
 // types
@@ -143,31 +143,31 @@ const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose, onOrderComplete })
 
     // TODO:adam break down component to smaller components and files
     return (
-        <div className="checkout-overlay" onClick={onClose}>
-            <div className="checkout-container" onClick={(e) => e.stopPropagation()}>
-                <div className="checkout-header">
+        <div className={styles.overlay} onClick={onClose}>
+            <div className={styles.container} onClick={(e) => e.stopPropagation()}>
+                <div className={styles.header}>
                     <h2>Checkout</h2>
-                    <button className="close-button" onClick={onClose}>
+                    <button className={styles.closeButton} onClick={onClose}>
                         ×
                     </button>
                 </div>
 
-                <div className="checkout-steps">
-                    <div className={`step ${currentStep === 'shipping' ? 'active' : ''} ${currentStep === 'payment' || currentStep === 'review' ? 'completed' : ''}`}>
-                        <span className="step-number">1</span>
-                        <span className="step-label">Shipping</span>
+                <div className={styles.steps}>
+                    <div className={`${styles.step} ${currentStep === 'shipping' ? styles.active : ''} ${currentStep === 'payment' || currentStep === 'review' ? styles.completed : ''}`}>
+                        <span className={styles.stepNumber}>1</span>
+                        <span className={styles.stepLabel}>Shipping</span>
                     </div>
-                    <div className={`step ${currentStep === 'payment' ? 'active' : ''} ${currentStep === 'review' ? 'completed' : ''}`}>
-                        <span className="step-number">2</span>
-                        <span className="step-label">Payment</span>
+                    <div className={`${styles.step} ${currentStep === 'payment' ? styles.active : ''} ${currentStep === 'review' ? styles.completed : ''}`}>
+                        <span className={styles.stepNumber}>2</span>
+                        <span className={styles.stepLabel}>Payment</span>
                     </div>
-                    <div className={`step ${currentStep === 'review' ? 'active' : ''}`}>
-                        <span className="step-number">3</span>
-                        <span className="step-label">Review</span>
+                    <div className={`${styles.step} ${currentStep === 'review' ? styles.active : ''}`}>
+                        <span className={styles.stepNumber}>3</span>
+                        <span className={styles.stepLabel}>Review</span>
                     </div>
                 </div>
 
-                <div className="checkout-content">
+                <div className={styles.content}>
                     {currentStep === 'shipping' && (
                         <ShippingForm shippingInfo={shippingInfo} setShippingInfo={setShippingInfo} errors={errors} />
                     )}
@@ -196,97 +196,97 @@ const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose, onOrderComplete })
 }
 
 const ShippingForm: React.FC<ShippingFormProps> = ({ shippingInfo, setShippingInfo, errors }) => {
-    return <div className="shipping-form">
+    return <div className={styles.shippingForm}>
         <h3>Shipping Information</h3>
-        <div className="form-row">
-            <div className="form-group">
+        <div className={styles.formRow}>
+            <div className={styles.formGroup}>
                 <label htmlFor="firstName">First Name *</label>
                 <input
                     type="text"
                     id="firstName"
                     value={shippingInfo.firstName}
                     onChange={(e) => setShippingInfo({ ...shippingInfo, firstName: e.target.value })}
-                    className={errors.firstName ? 'error' : ''}
+                    className={errors.firstName ? styles.error : ''}
                 />
-                {errors.firstName && <span className="error-message">{errors.firstName}</span>}
+                {errors.firstName && <span className={styles.errorMessage}>{errors.firstName}</span>}
             </div>
-            <div className="form-group">
-                <label htmlFor="lastName">Last Name *</label>
+            <div className={styles.formGroup}>
+                <label htmlFor='lastName'>Last Name *</label>
                 <input
-                    type="text"
-                    id="lastName"
+                    type='text'
+                    id='lastName'
                     value={shippingInfo.lastName}
                     onChange={(e) => setShippingInfo({ ...shippingInfo, lastName: e.target.value })}
-                    className={errors.lastName ? 'error' : ''}
+                    className={errors.lastName ? styles.error : ''}
                 />
-                {errors.lastName && <span className="error-message">{errors.lastName}</span>}
+                {errors.lastName && <span className={styles.errorMessage}>{errors.lastName}</span>}
             </div>
         </div>
 
-        <div className="form-group">
-            <label htmlFor="email">Email *</label>
+        <div className={styles.formGroup}>
+            <label htmlFor='email'>Email *</label>
             <input
-                type="email"
-                id="email"
+                type='email'
+                id='email'
                 value={shippingInfo.email}
                 onChange={(e) => setShippingInfo({ ...shippingInfo, email: e.target.value })}
-                className={errors.email ? 'error' : ''}
+                className={errors.email ? styles.error : ''}
             />
-            {errors.email && <span className="error-message">{errors.email}</span>}
+            {errors.email && <span className={styles.errorMessage}>{errors.email}</span>}
         </div>
 
-        <div className="form-group">
-            <label htmlFor="address">Address *</label>
+        <div className={styles.formGroup}>
+            <label htmlFor='address'>Address *</label>
             <input
-                type="text"
-                id="address"
+                type='text'
+                id='address'
                 value={shippingInfo.address}
                 onChange={(e) => setShippingInfo({ ...shippingInfo, address: e.target.value })}
-                className={errors.address ? 'error' : ''}
+                className={errors.address ? styles.error : ''}
             />
-            {errors.address && <span className="error-message">{errors.address}</span>}
+            {errors.address && <span className={styles.errorMessage}>{errors.address}</span>}
         </div>
 
-        <div className="form-row">
-            <div className="form-group">
-                <label htmlFor="city">City *</label>
+        <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+                <label htmlFor='city'>City *</label>
                 <input
-                    type="text"
-                    id="city"
+                    type='text'
+                    id='city'
                     value={shippingInfo.city}
                     onChange={(e) => setShippingInfo({ ...shippingInfo, city: e.target.value })}
-                    className={errors.city ? 'error' : ''}
+                    className={errors.city ? styles.error : ''}
                 />
-                {errors.city && <span className="error-message">{errors.city}</span>}
+                {errors.city && <span className={styles.errorMessage}>{errors.city}</span>}
             </div>
-            <div className="form-group">
-                <label htmlFor="state">State *</label>
+            <div className={styles.formGroup}>
+                <label htmlFor='state'>State *</label>
                 <input
-                    type="text"
-                    id="state"
+                    type='text'
+                    id='state'
                     value={shippingInfo.state}
                     onChange={(e) => setShippingInfo({ ...shippingInfo, state: e.target.value })}
-                    className={errors.state ? 'error' : ''}
+                    className={errors.state ? styles.error : ''}
                 />
-                {errors.state && <span className="error-message">{errors.state}</span>}
+                {errors.state && <span className={styles.errorMessage}>{errors.state}</span>}
             </div>
-            <div className="form-group">
-                <label htmlFor="zipCode">ZIP Code *</label>
+            <div className={styles.formGroup}>
+                <label htmlFor='zipCode'>ZIP Code *</label>
                 <input
-                    type="text"
-                    id="zipCode"
+                    type='text'
+                    id='zipCode'
                     value={shippingInfo.zipCode}
                     onChange={(e) => setShippingInfo({ ...shippingInfo, zipCode: e.target.value })}
-                    className={errors.zipCode ? 'error' : ''}
+                    className={errors.zipCode ? styles.error : ''}
                 />
-                {errors.zipCode && <span className="error-message">{errors.zipCode}</span>}
+                {errors.zipCode && <span className={styles.errorMessage}>{errors.zipCode}</span>}
             </div>
         </div>
 
-        <div className="form-group">
-            <label htmlFor="country">Country</label>
+        <div className={styles.formGroup}>
+            <label htmlFor='country'>Country</label>
             <select
-                id="country"
+                id='country'
                 value={shippingInfo.country}
                 onChange={(e) => setShippingInfo({ ...shippingInfo, country: e.target.value })}
             >
@@ -300,9 +300,9 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ shippingInfo, setShippingIn
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({ paymentInfo, setPaymentInfo, errors }) => {
-    return <div className="payment-form">
+    return <div className={styles.paymentForm}>
         <h3>Payment Information</h3>
-        <div className="form-group">
+        <div className={styles.formGroup}>
             <label htmlFor="cardNumber">Card Number *</label>
             <input
                 type="text"
@@ -311,25 +311,25 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ paymentInfo, setPaymentInfo, 
                 onChange={(e) => setPaymentInfo({ ...paymentInfo, cardNumber: formatCardNumber(e.target.value) })}
                 placeholder="1234 5678 9012 3456"
                 maxLength={19}
-                className={errors.cardNumber ? 'error' : ''}
+                className={errors.cardNumber ? styles.error : ''}
             />
-            {errors.cardNumber && <span className="error-message">{errors.cardNumber}</span>}
+            {errors.cardNumber && <span className={styles.errorMessage}>{errors.cardNumber}</span>}
         </div>
 
-        <div className="form-group">
+        <div className={styles.formGroup}>
             <label htmlFor="cardholderName">Cardholder Name *</label>
             <input
                 type="text"
                 id="cardholderName"
                 value={paymentInfo.cardholderName}
                 onChange={(e) => setPaymentInfo({ ...paymentInfo, cardholderName: e.target.value })}
-                className={errors.cardholderName ? 'error' : ''}
+                className={errors.cardholderName ? styles.error : ''}
             />
-            {errors.cardholderName && <span className="error-message">{errors.cardholderName}</span>}
+            {errors.cardholderName && <span className={styles.errorMessage}>{errors.cardholderName}</span>}
         </div>
 
-        <div className="form-row">
-            <div className="form-group">
+        <div className={styles.formRow}>
+            <div className={styles.formGroup}>
                 <label htmlFor="expiryDate">Expiry Date *</label>
                 <input
                     type="text"
@@ -338,11 +338,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ paymentInfo, setPaymentInfo, 
                     onChange={(e) => setPaymentInfo({ ...paymentInfo, expiryDate: e.target.value })}
                     placeholder="MM/YY"
                     maxLength={5}
-                    className={errors.expiryDate ? 'error' : ''}
+                    className={errors.expiryDate ? styles.error : ''}
                 />
-                {errors.expiryDate && <span className="error-message">{errors.expiryDate}</span>}
+                {errors.expiryDate && <span className={styles.errorMessage}>{errors.expiryDate}</span>}
             </div>
-            <div className="form-group">
+            <div className={styles.formGroup}>
                 <label htmlFor="cvv">CVV *</label>
                 <input
                     type="text"
@@ -351,34 +351,34 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ paymentInfo, setPaymentInfo, 
                     onChange={(e) => setPaymentInfo({ ...paymentInfo, cvv: e.target.value })}
                     placeholder="123"
                     maxLength={4}
-                    className={errors.cvv ? 'error' : ''}
+                    className={errors.cvv ? styles.error : ''}
                 />
-                {errors.cvv && <span className="error-message">{errors.cvv}</span>}
+                {errors.cvv && <span className={styles.errorMessage}>{errors.cvv}</span>}
             </div>
         </div>
     </div>
 }
 
 const ReviewForm: React.FC<ReviewFormProps> = ({ state, shippingInfo, paymentInfo }) => {
-    return <div className="review-section">
+    return <div className={styles.reviewSection}>
         <h3>Review Your Order</h3>
 
-        <div className="order-summary">
+        <div className={styles.orderSummary}>
             <h4>Order Items</h4>
             {state.items.map((item) => (
-                <div key={item.id} className="order-item">
-                    <span className="item-name">{item.name}</span>
-                    <span className="item-quantity">Qty: {item.quantity}</span>
-                    <span className="item-price">{formatPrice(item.price * item.quantity)}</span>
+                <div key={item.id} className={styles.orderItem}>
+                    <span className={styles.itemName}>{item.name}</span>
+                    <span className={styles.itemQuantity}>Qty: {item.quantity}</span>
+                    <span className={styles.itemPrice}>{formatPrice(item.price * item.quantity)}</span>
                 </div>
             ))}
 
-            <div className="order-total">
+            <div className={styles.orderTotal}>
                 <span>Total: {formatPrice(state.total)}</span>
             </div>
         </div>
 
-        <div className="shipping-summary">
+        <div className={styles.shippingSummary}>
             <h4>Shipping Address</h4>
             <p>
                 {shippingInfo.firstName} {shippingInfo.lastName}<br />
@@ -388,7 +388,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ state, shippingInfo, paymentInf
             </p>
         </div>
 
-        <div className="payment-summary">
+        <div className={styles.paymentSummary}>
             <h4>Payment Method</h4>
             <p>
                 Card ending in {paymentInfo.cardNumber.slice(-4)}<br />
@@ -399,14 +399,14 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ state, shippingInfo, paymentInf
 }
 
 const CheckoutFooter: React.FC<CheckoutFooterProps> = ({ isProcessing, currentStep, handlePlaceOrder, setCurrentStep, onClose, handleShippingNext, handlePaymentNext }) => {
-    return <div className="checkout-footer">
-        <div className="checkout-actions">
+    return <div className={styles.footer}>
+        <div className={styles.actions}>
             {currentStep === 'shipping' && (
                 <>
-                    <button className="cancel-btn" onClick={onClose}>
+                    <button className={styles.cancelBtn} onClick={onClose}>
                         Cancel
                     </button>
-                    <button className="next-btn" onClick={handleShippingNext}>
+                    <button className={styles.nextBtn} onClick={handleShippingNext}>
                         Continue to Payment
                     </button>
                 </>
@@ -414,10 +414,10 @@ const CheckoutFooter: React.FC<CheckoutFooterProps> = ({ isProcessing, currentSt
 
             {currentStep === 'payment' && (
                 <>
-                    <button className="back-btn" onClick={() => setCurrentStep('shipping')}>
+                    <button className={styles.backBtn} onClick={() => setCurrentStep('shipping')}>
                         Back to Shipping
                     </button>
-                    <button className="next-btn" onClick={handlePaymentNext}>
+                    <button className={styles.nextBtn} onClick={handlePaymentNext}>
                         Review Order
                     </button>
                 </>
@@ -425,11 +425,11 @@ const CheckoutFooter: React.FC<CheckoutFooterProps> = ({ isProcessing, currentSt
 
             {currentStep === 'review' && (
                 <>
-                    <button className="back-btn" onClick={() => setCurrentStep('payment')}>
+                    <button className={styles.backBtn} onClick={() => setCurrentStep('payment')}>
                         Back to Payment
                     </button>
                     <button
-                        className="place-order-btn"
+                        className={styles.placeOrderBtn}
                         onClick={handlePlaceOrder}
                         disabled={isProcessing}
                     >

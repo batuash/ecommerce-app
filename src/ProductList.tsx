@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useCart } from './CartContext'
-import './ProductList.css'
+import styles from './ProductList.module.css'
 import config from './config'
 
 interface Product {
@@ -34,26 +34,26 @@ function ProductList() {
   }
 
   return (
-    <div className="product-list-container">
-      <h2 className="product-list-title">Product Catalog</h2>
-      <div className="product-grid">
+    <div className={styles.container}>
+      <h2 className={styles.title}>Product Catalog</h2>
+      <div className={styles.grid}>
         {products.map((product) => {
           const cartItem = state.items.find(item => item.id === product.id)
           const isInCart = cartItem !== undefined
           
           return (
-            <div key={product.id} className="product-card">
-              <div className="product-info">
-                <h3 className="product-name">{product.name}</h3>
-                <p className="product-price">{formatPrice(product.price)}</p>
+            <div key={product.id} className={styles.card}>
+              <div className={styles.info}>
+                <h3 className={styles.name}>{product.name}</h3>
+                <p className={styles.price}>{formatPrice(product.price)}</p>
                 {isInCart && (
-                  <p className="in-cart-indicator">
+                  <p className={styles.inCartIndicator}>
                     In cart: {cartItem.quantity}
                   </p>
                 )}
               </div>
               <button 
-                className={`add-to-cart-btn ${isInCart ? 'in-cart' : ''}`}
+                className={`${styles.addToCartBtn} ${isInCart ? styles.inCart : ''}`}
                 onClick={() => handleAddToCart(product)}
               >
                 {isInCart ? 'Add More' : 'Add to Cart'}

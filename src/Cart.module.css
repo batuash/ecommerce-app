@@ -1,4 +1,4 @@
-.cart-overlay {
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +12,7 @@
   backdrop-filter: blur(4px);
 }
 
-.cart-container {
+.container {
   background: white;
   border-radius: 12px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
@@ -24,7 +24,7 @@
   flex-direction: column;
 }
 
-.cart-header {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,13 +34,13 @@
   color: white;
 }
 
-.cart-header h2 {
+.header h2 {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
 }
 
-.close-button {
+.closeButton {
   background: none;
   border: none;
   color: white;
@@ -56,17 +56,17 @@
   transition: background-color 0.2s;
 }
 
-.close-button:hover {
+.closeButton:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.cart-items {
+.items {
   flex: 1;
   overflow-y: auto;
   padding: 16px 24px;
 }
 
-.cart-item {
+.item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -74,30 +74,30 @@
   border-bottom: 1px solid #f3f4f6;
 }
 
-.cart-item:last-child {
+.item:last-child {
   border-bottom: none;
 }
 
-.item-info h3 {
+.itemInfo h3 {
   margin: 0 0 4px 0;
   font-size: 1rem;
   font-weight: 600;
   color: #1f2937;
 }
 
-.item-price {
+.itemPrice {
   margin: 0;
   color: #6b7280;
   font-size: 0.875rem;
 }
 
-.item-controls {
+.itemControls {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.quantity-controls {
+.quantityControls {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -106,7 +106,7 @@
   padding: 4px;
 }
 
-.quantity-btn {
+.quantityBtn {
   background: white;
   border: 1px solid #d1d5db;
   border-radius: 6px;
@@ -120,12 +120,12 @@
   transition: all 0.2s;
 }
 
-.quantity-btn:hover:not(:disabled) {
+.quantityBtn:hover:not(:disabled) {
   background: #f3f4f6;
   border-color: #9ca3af;
 }
 
-.quantity-btn:disabled {
+.quantityBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -137,14 +137,14 @@
   color: #374151;
 }
 
-.item-total {
+.itemTotal {
   font-weight: 600;
   color: #1f2937;
   min-width: 60px;
   text-align: right;
 }
 
-.remove-btn {
+.removeBtn {
   background: #ef4444;
   color: white;
   border: none;
@@ -155,17 +155,17 @@
   transition: background-color 0.2s;
 }
 
-.remove-btn:hover {
+.removeBtn:hover {
   background: #dc2626;
 }
 
-.cart-footer {
+.footer {
   border-top: 1px solid #e5e7eb;
   padding: 20px 24px;
   background: #f9fafb;
 }
 
-.cart-total {
+.total {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -175,17 +175,17 @@
   color: #1f2937;
 }
 
-.total-amount {
+.totalAmount {
   color: #059669;
   font-size: 1.25rem;
 }
 
-.cart-actions {
+.actions {
   display: flex;
   gap: 12px;
 }
 
-.clear-cart-btn {
+.clearCartBtn {
   flex: 1;
   background: #6b7280;
   color: white;
@@ -197,11 +197,11 @@
   transition: background-color 0.2s;
 }
 
-.clear-cart-btn:hover {
+.clearCartBtn:hover {
   background: #4b5563;
 }
 
-.checkout-btn {
+.checkoutBtn {
   flex: 2;
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
@@ -213,23 +213,23 @@
   transition: all 0.2s;
 }
 
-.checkout-btn:hover {
+.checkoutBtn:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
-.empty-cart {
+.emptyCart {
   text-align: center;
   padding: 40px 24px;
   color: #6b7280;
 }
 
-.empty-cart p {
+.emptyCart p {
   margin: 0 0 20px 0;
   font-size: 1.125rem;
 }
 
-.continue-shopping {
+.continueShopping {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
@@ -240,30 +240,30 @@
   transition: all 0.2s;
 }
 
-.continue-shopping:hover {
+.continueShopping:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 /* Responsive design */
 @media (max-width: 640px) {
-  .cart-container {
+  .container {
     width: 95%;
     margin: 20px;
   }
   
-  .cart-item {
+  .item {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
   
-  .item-controls {
+  .itemControls {
     width: 100%;
     justify-content: space-between;
   }
   
-  .cart-actions {
+  .actions {
     flex-direction: column;
   }
 }

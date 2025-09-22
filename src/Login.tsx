@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
-import './Login.css'
+import styles from './Login.module.css'
 
 interface FormData {
   email: string
@@ -86,21 +86,21 @@ function Login({ onLogin }: LoginProps) {
   }
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="login-header">
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <div className={styles.header}>
           <h1>Welcome Back</h1>
           <p>Sign in to your account</p>
         </div>
         
-        <form onSubmit={handleSubmit} className="login-form">
+        <form onSubmit={handleSubmit} className={styles.form}>
           {errors.general && (
-            <div className="error-message general">
+            <div className={`${styles.errorMessage} ${styles.general}`}>
               {errors.general}
             </div>
           )}
           
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -109,14 +109,14 @@ function Login({ onLogin }: LoginProps) {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className={errors.email ? 'error' : ''}
+              className={errors.email ? styles.error : ''}
             />
             {errors.email && (
-              <span className="error-message">{errors.email}</span>
+              <span className={styles.errorMessage}>{errors.email}</span>
             )}
           </div>
           
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="password">Password</label>
             <input
               type="password"
@@ -125,25 +125,25 @@ function Login({ onLogin }: LoginProps) {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
-              className={errors.password ? 'error' : ''}
+              className={errors.password ? styles.error : ''}
             />
             {errors.password && (
-              <span className="error-message">{errors.password}</span>
+              <span className={styles.errorMessage}>{errors.password}</span>
             )}
           </div>
           
           <button 
             type="submit" 
-            className="login-button"
+            className={styles.button}
             disabled={isLoading}
           >
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
         
-        <div className="login-footer">
-          <p>Don't have an account? <a href="#" className="link">Sign up</a></p>
-          <a href="#" className="link">Forgot password?</a>
+        <div className={styles.footer}>
+          <p>Don't have an account? <a href="#" className={styles.link}>Sign up</a></p>
+          <a href="#" className={styles.link}>Forgot password?</a>
         </div>
       </div>
     </div>
