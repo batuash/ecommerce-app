@@ -10,7 +10,7 @@ interface CartItem extends Product {
   quantity: number
 }
 
-interface CartState {
+export interface CartState {
   items: CartItem[]
   total: number
   itemCount: number

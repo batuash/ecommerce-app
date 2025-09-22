@@ -5,9 +5,10 @@ import './Cart.css'
 interface CartProps {
   isOpen: boolean
   onClose: () => void
+  onCheckout: () => void
 }
 
-const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
+const Cart: React.FC<CartProps> = ({ isOpen, onClose, onCheckout }) => {
   const { state, removeItem, updateQuantity, clearCart } = useCart()
 
   const formatPrice = (price: number): string => {
@@ -89,7 +90,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                 <button className="clear-cart-btn" onClick={clearCart}>
                   Clear Cart
                 </button>
-                <button className="checkout-btn">
+                <button className="checkout-btn" onClick={onCheckout}>
                   Checkout
                 </button>
               </div>

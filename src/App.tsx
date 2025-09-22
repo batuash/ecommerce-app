@@ -4,6 +4,8 @@ import viteLogo from '/vite.svg'
 import Login from './Login.tsx'
 import ProductList from './ProductList.tsx'
 import Cart from './Cart.tsx'
+import Checkout from './Checkout.tsx'
+import OrderConfirmation from './OrderConfirmation.tsx'
 import { CartProvider, useCart } from './CartContext'
 import './App.css'
 
@@ -16,6 +18,8 @@ function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
   const [user, setUser] = useState<User | null>(null)
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false)
+  const [orderData, setOrderData] = useState<any>(null)
   const { state } = useCart()
 
   const handleLogin = (loginData: User): void => {
@@ -28,6 +32,20 @@ function AppContent() {
   const handleLogout = (): void => {
     setUser(null)
     setIsLoggedIn(false)
+  }
+
+  const handleCheckout = (): void => {
+    setIsCartOpen(false)
+    setIsCheckoutOpen(true)
+  }
+
+  const handleOrderComplete = (orderData: any): void => {
+    setIsCheckoutOpen(false)
+    setOrderData(orderData)
+  }
+
+  const handleCloseOrderConfirmation = (): void => {
+    setOrderData(null)
   }
 
   // Show login page if not logged in
@@ -71,7 +89,24 @@ function AppContent() {
         <ProductList />
       </div>
 
-      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      <Cart 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)} 
+        onCheckout={handleCheckout}
+      />
+      
+      <Checkout 
+        isOpen={isCheckoutOpen} 
+        onClose={() => setIsCheckoutOpen(false)}
+        onOrderComplete={handleOrderComplete}
+      />
+      
+      {orderData && (
+        <OrderConfirmation 
+          orderData={orderData}
+          onClose={handleCloseOrderConfirmation}
+        />
+      )}
     </>
   )
 }
