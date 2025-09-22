@@ -1,6 +1,7 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import { useCart } from './CartContext'
 import './ProductList.css'
+import config from './config'
 
 interface Product {
   id: number
@@ -8,29 +9,18 @@ interface Product {
   price: number
 }
 
-interface ProductListProps {
-  products?: Product[]
-}
-
-const defaultProducts: Product[] = [
-  { id: 1, name: 'Laptop', price: 999.99 },
-  { id: 2, name: 'Smartphone', price: 699.99 },
-  { id: 3, name: 'Headphones', price: 199.99 },
-  { id: 4, name: 'Tablet', price: 449.99 },
-  { id: 5, name: 'Wireless Mouse', price: 29.99 },
-  { id: 6, name: 'Keyboard', price: 89.99 },
-  { id: 7, name: 'Monitor', price: 299.99 },
-  { id: 8, name: 'USB Drive', price: 19.99 },
-  { id: 9, name: 'Smart TV', price: 1299.99 },
-  { id: 10, name: 'Smart Home Speaker', price: 199.99 },
-  { id: 11, name: 'Smart Home Security Camera', price: 299.99 },
-  { id: 12, name: 'Smart Home Thermostat', price: 299.99 },
-  { id: 13, name: 'Smart Home Light', price: 29.99 },
-  { id: 14, name: 'Smart Home Doorbell', price: 299.99 },
-]
-
-function ProductList({ products = defaultProducts }: ProductListProps) {
+function ProductList() {
   const { addItem, state } = useCart()
+  const [products, setProducts] = useState<Product[]>([])
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await fetch(`${config.apiBaseUrl}/products`)
+      const data = await response.json()
+      setProducts(data)
+    }
+    fetchProducts()
+  }, [products])
   
   const formatPrice = (price: number): string => {
     return new Intl.NumberFormat('en-US', {
