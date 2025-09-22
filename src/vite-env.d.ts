@@ -1,13 +1,14 @@
 /// <reference types="vite/client" />
 
-declare module '*.svg' {
-  import React = require('react')
-  export const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>
-  const src: string
-  export default src
+// Extend the ImportMetaEnv interface to include our custom environment variables
+interface ImportMetaEnv {
+  // API Configuration
+  readonly API_BASE_URL: string
+  
+  // App Configuration
+  readonly APP_ENVIRONMENT: string
 }
 
-declare module '/vite.svg' {
-  const content: string
-  export default content
+interface ImportMeta {
+  readonly env: ImportMetaEnv
 }
