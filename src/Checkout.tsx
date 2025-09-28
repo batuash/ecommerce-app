@@ -1,34 +1,21 @@
 import React, { useState } from 'react'
 import { useCart, CartState } from './CartContext'
 import styles from './Checkout.module.css'
-import { delay } from './utils'
+import config from './config'
+import {
+  OrderData,
+  ShippingMethod,
+  ShippingInfo,
+  PaymentMethod,
+  PaymentInfo,
+  Payment,
+  OrderConfirmationData
+} from './types'
 
 // types
-interface CheckoutProps {
-    isOpen: boolean
-    onClose: () => void
-    onOrderComplete: (orderData: OrderData) => void
-}
+export type CurrentStep = 'shipping' | 'payment' | 'review'
 
-interface ShippingFormProps {
-    shippingInfo: ShippingInfo
-    errors: Errors
-    setShippingInfo: (shippingInfo: ShippingInfo) => void
-}
-
-interface PaymentFormProps {
-    paymentInfo: PaymentInfo
-    errors: Errors
-    setPaymentInfo: (paymentInfo: PaymentInfo) => void
-}
-
-interface ReviewFormProps {
-    state: CartState
-    shippingInfo: ShippingInfo
-    paymentInfo: PaymentInfo
-}
-
-interface CheckoutFooterProps {
+export type CheckoutFooterProps = {
     isProcessing: boolean
     handlePlaceOrder: () => void
     setCurrentStep: (step: CurrentStep) => void
@@ -38,42 +25,31 @@ interface CheckoutFooterProps {
     handlePaymentNext: () => void
 }
 
-interface OrderData {
-    orderId: string
-    items: Array<{
-        id: number
-        name: string
-        price: number
-        quantity: number
-    }>
-    total: number
+export type Errors = Record<string, string>
+
+export type CheckoutProps = {
+    isOpen: boolean
+    onClose: () => void
+    onOrderComplete: (orderData: OrderConfirmationData) => void
+}
+
+export type ShippingFormProps = {
+    shippingInfo: ShippingInfo
+    errors: Errors
+    setShippingInfo: (shippingInfo: ShippingInfo) => void
+}
+
+export type PaymentFormProps = {
+    paymentInfo: PaymentInfo
+    errors: Errors
+    setPaymentInfo: (paymentInfo: PaymentInfo) => void
+}
+
+export type ReviewFormProps = {
+    state: CartState
     shippingInfo: ShippingInfo
     paymentInfo: PaymentInfo
-    timestamp: string
 }
-
-interface ShippingInfo {
-    firstName: string
-    lastName: string
-    email: string
-    address: string
-    city: string
-    state: string
-    zipCode: string
-    country: string
-}
-
-interface PaymentInfo {
-    cardNumber: string
-    expiryDate: string
-    cvv: string
-    cardholderName: string
-}
-
-type CurrentStep = 'shipping' | 'payment' | 'review'
-
-// TODO:adam maybe add a more precise type for the errors
-type Errors = Record<string, string>
 
 // components
 const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose, onOrderComplete }) => {
@@ -84,18 +60,22 @@ const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose, onOrderComplete })
         firstName: '',
         lastName: '',
         email: '',
-        address: '',
+        phoneNumber: '',
+        addressLine1: '',
         city: '',
         state: '',
-        zipCode: '',
-        country: 'United States'
+        postalCode: '',
+        country: '',
+        method: ShippingMethod.STANDARD
     })
     const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
+        method: PaymentMethod.CREDIT_CARD,
         cardNumber: '',
         expiryDate: '',
         cvv: '',
         cardholderName: ''
     })
+
     const [errors, setErrors] = useState<Errors>({})
 
     const handleShippingNext = () => {
@@ -122,21 +102,30 @@ const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose, onOrderComplete })
 
     const handlePlaceOrder = async () => {
         setIsProcessing(true)
-        // Simulate API call
-        await delay(2000)
-
-        const orderData: OrderData = {
-            orderId: `ORD-${Date.now()}`,
-            items: state.items,
-            total: state.total,
-            shippingInfo,
-            paymentInfo,
-            timestamp: new Date().toISOString()
+        const orderData = getOrderData(state, shippingInfo, paymentInfo)
+        const response =await fetch(`${config.apiBaseUrl}/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData)
+        })
+        const { id, createdAt, totalAmount, orderItems } = await response.json()
+        const orderConfirmationData = {
+            orderId: id,
+            timestamp: createdAt,
+            total: totalAmount,
+            orderItems,
+            shipping: orderData.shipping,
+            payment: {
+                lastFourDigits: orderData.payment.lastFourDigits,
+                cardholderName: paymentInfo.cardholderName
+            }
         }
-
+        
         clearCart()
-        onOrderComplete(orderData)
         setIsProcessing(false)
+        onOrderComplete(orderConfirmationData)
     }
 
     if (!isOpen) return null
@@ -236,15 +225,27 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ shippingInfo, setShippingIn
         </div>
 
         <div className={styles.formGroup}>
-            <label htmlFor='address'>Address *</label>
+            <label htmlFor='phoneNumber'>Phone Number *</label>
+            <input
+                type='tel'
+                id='phoneNumber'
+                value={shippingInfo.phoneNumber}
+                onChange={(e) => setShippingInfo({ ...shippingInfo, phoneNumber: e.target.value })}
+                className={errors.phoneNumber ? styles.error : ''}
+            />
+            {errors.phoneNumber && <span className={styles.errorMessage}>{errors.phoneNumber}</span>}
+        </div>
+
+        <div className={styles.formGroup}>
+            <label htmlFor='addressLine1'>Address *</label>
             <input
                 type='text'
-                id='address'
-                value={shippingInfo.address}
-                onChange={(e) => setShippingInfo({ ...shippingInfo, address: e.target.value })}
-                className={errors.address ? styles.error : ''}
+                id='addressLine1'
+                value={shippingInfo.addressLine1}
+                onChange={(e) => setShippingInfo({ ...shippingInfo, addressLine1: e.target.value })}
+                className={errors.addressLine1 ? styles.error : ''}
             />
-            {errors.address && <span className={styles.errorMessage}>{errors.address}</span>}
+            {errors.addressLine1 && <span className={styles.errorMessage}>{errors.addressLine1}</span>}
         </div>
 
         <div className={styles.formRow}>
@@ -271,15 +272,15 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ shippingInfo, setShippingIn
                 {errors.state && <span className={styles.errorMessage}>{errors.state}</span>}
             </div>
             <div className={styles.formGroup}>
-                <label htmlFor='zipCode'>ZIP Code *</label>
+                <label htmlFor='postalCode'>Postal Code *</label>
                 <input
                     type='text'
-                    id='zipCode'
-                    value={shippingInfo.zipCode}
-                    onChange={(e) => setShippingInfo({ ...shippingInfo, zipCode: e.target.value })}
-                    className={errors.zipCode ? styles.error : ''}
+                    id='postalCode'
+                    value={shippingInfo.postalCode}
+                    onChange={(e) => setShippingInfo({ ...shippingInfo, postalCode: e.target.value })}
+                    className={errors.postalCode ? styles.error : ''}
                 />
-                {errors.zipCode && <span className={styles.errorMessage}>{errors.zipCode}</span>}
+                {errors.postalCode && <span className={styles.errorMessage}>{errors.postalCode}</span>}
             </div>
         </div>
 
@@ -296,12 +297,43 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ shippingInfo, setShippingIn
                 <option value="Australia">Australia</option>
             </select>
         </div>
+
+        <div className={styles.formGroup}>
+            <label htmlFor='method'>Shipping Method</label>
+            <select
+                id='method'
+                value={shippingInfo.method}
+                onChange={(e) => setShippingInfo({ ...shippingInfo, method: e.target.value as ShippingMethod })}
+            >
+                <option value={ShippingMethod.STANDARD}>Standard</option>
+                <option value={ShippingMethod.EXPRESS}>Express</option>
+                <option value={ShippingMethod.OVERNIGHT}>Overnight</option>
+                <option value={ShippingMethod.PICKUP}>Pickup</option>
+            </select>
+        </div>
     </div>
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({ paymentInfo, setPaymentInfo, errors }) => {
     return <div className={styles.paymentForm}>
         <h3>Payment Information</h3>
+        <div className={styles.formGroup}>
+            <label htmlFor='method'>PaymentMethod</label>
+            <select
+                id='method'
+                value={paymentInfo.method}
+                onChange={(e) => setPaymentInfo({ ...paymentInfo, method: e.target.value as PaymentMethod })}
+            >
+                <option value={PaymentMethod.CREDIT_CARD}>Credit Card</option>
+                <option value={PaymentMethod.DEBIT_CARD}>Debit Card</option>
+                <option value={PaymentMethod.PAYPAL}>Paypal</option>
+                <option value={PaymentMethod.STRIPE}>Stripe</option>
+                <option value={PaymentMethod.BANK_TRANSFER}>Bank Transfer</option>
+                <option value={PaymentMethod.CASH}>Cash</option>
+                <option value={PaymentMethod.CHECK}>Check</option>
+                <option value={PaymentMethod.CRYPTOCURRENCY}>Cryptocurrency</option>
+            </select>
+        </div>
         <div className={styles.formGroup}>
             <label htmlFor="cardNumber">Card Number *</label>
             <input
@@ -382,8 +414,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ state, shippingInfo, paymentInf
             <h4>Shipping Address</h4>
             <p>
                 {shippingInfo.firstName} {shippingInfo.lastName}<br />
-                {shippingInfo.address}<br />
-                {shippingInfo.city}, {shippingInfo.state} {shippingInfo.zipCode}<br />
+                {shippingInfo.addressLine1}<br />
+                {shippingInfo.city}, {shippingInfo.state} {shippingInfo.postalCode}<br />
                 {shippingInfo.country}
             </p>
         </div>
@@ -457,11 +489,13 @@ const validateShippingInfo = (shippingInfo: ShippingInfo): Errors => {
     if (!shippingInfo.lastName.trim()) errors.lastName = 'Last name is required'
     if (!shippingInfo.email.trim()) errors.email = 'Email is required'
     else if (!/\S+@\S+\.\S+/.test(shippingInfo.email)) errors.email = 'Email is invalid'
-    if (!shippingInfo.address.trim()) errors.address = 'Address is required'
+    if (!shippingInfo.phoneNumber.trim()) errors.phoneNumber = 'Phone number is required'
+    else if (!/^\d{10}$/.test(shippingInfo.phoneNumber)) errors.phoneNumber = 'Invalid phone number format'
+    if (!shippingInfo.addressLine1.trim()) errors.addressLine1 = 'Address is required'
     if (!shippingInfo.city.trim()) errors.city = 'City is required'
     if (!shippingInfo.state.trim()) errors.state = 'State is required'
-    if (!shippingInfo.zipCode.trim()) errors.zipCode = 'ZIP code is required'
-    else if (!/^\d{5}(-\d{4})?$/.test(shippingInfo.zipCode)) errors.zipCode = 'Invalid ZIP code format'
+    if (!shippingInfo.postalCode.trim()) errors.postalCode = 'Postal code is required'
+    else if (!/^\d{5}(-\d{4})?$/.test(shippingInfo.postalCode)) errors.postalCode = 'Invalid postal code format'
 
     return errors
 }
@@ -499,4 +533,38 @@ const formatCardNumber = (value: string): string => {
     }
 }
 
+const getPayment = (paymentInfo: PaymentInfo, shippingInfo: ShippingInfo): Payment => {
+    return {
+        method: paymentInfo.method,
+        lastFourDigits: paymentInfo.cardNumber.slice(-4),
+        expiryMonth: paymentInfo.expiryDate.split('/')[0],
+        expiryYear: paymentInfo.expiryDate.split('/')[1],
+        billingFirstName: shippingInfo.firstName,
+        billingLastName: shippingInfo.lastName,
+        billingAddressLine1: shippingInfo.addressLine1,
+        billingCity: shippingInfo.city,
+        billingState: shippingInfo.state,
+        billingPostalCode: shippingInfo.postalCode,
+        billingCountry: shippingInfo.country
+    }
+}
+
+const getOrderData = (state: CartState, shippingInfo: ShippingInfo, paymentInfo: PaymentInfo): OrderData => {
+        const orderItems = state.items.map((item) => ({
+            productId: item.id,
+            quantity: item.quantity
+        }))
+        const payment = getPayment(paymentInfo, shippingInfo)
+
+        return  {
+            customerEmail: shippingInfo.email,
+            customerName: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
+            customerPhone: shippingInfo.phoneNumber,
+            orderItems,
+            shipping: shippingInfo,
+            payment,
+        }
+}
+
 export default Checkout
+

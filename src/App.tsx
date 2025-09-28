@@ -7,6 +7,7 @@ import Cart from './Cart.tsx'
 import Checkout from './Checkout.tsx'
 import OrderConfirmation from './OrderConfirmation.tsx'
 import { CartProvider, useCart } from './CartContext'
+import { OrderConfirmationData } from './types'
 import styles from './App.module.css'
 
 interface User {
@@ -14,17 +15,17 @@ interface User {
   password: string
 }
 
+// TODO: add translation
 function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
   const [user, setUser] = useState<User | null>(null)
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false)
-  const [orderData, setOrderData] = useState<any>(null)
+  const [orderData, setOrderData] = useState<OrderConfirmationData | null>(null)
   const { state } = useCart()
 
+  // TODO: add proper login logic
   const handleLogin = (loginData: User): void => {
-    // In a real app, you would validate credentials with your backend
-    console.log('User logged in:', loginData.email)
     setUser(loginData)
     setIsLoggedIn(true)
   }
