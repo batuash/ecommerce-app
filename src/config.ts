@@ -32,9 +32,9 @@ const getNumberEnvVar = (key: string, fallback: number = 0): number => {
 // Configuration object with all environment variables
 export const config: Config = {
   // API Configuration
-  apiBaseUrl: getEnvVar('API_BASE_URL', 'http://localhost:3000'),
+  apiBaseUrl: getEnvVar('VITE_API_BASE_URL', 'http://localhost:3000'),
   // App Configuration
-  appEnvironment: getEnvVar('APP_ENVIRONMENT', 'development'),
+  appEnvironment: getEnvVar('VITE_APP_ENVIRONMENT', 'development'),
 };
 
 // Utility functions for common operations
