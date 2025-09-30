@@ -20,7 +20,7 @@ function ProductList() {
       setProducts(data)
     }
     fetchProducts()
-  }, [products])
+  }, [])
   
   const formatPrice = (price: number): string => {
     return new Intl.NumberFormat('en-US', {
