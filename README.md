@@ -49,6 +49,14 @@ src/
 └── mockeData.ts          # Mock data for development
 ```
 
+## 🌐 Live Demo
+
+Experience the application live at: **[https://ecommerce-app-2gxe.onrender.com](https://ecommerce-app-2gxe.onrender.com)**
+
+The demo showcases all features including user authentication, product browsing, shopping cart management, and the complete checkout process.
+
+**Note:** The demo may take up to a minute to load initially as the hosting service spins up from sleep mode.
+
 ## 🚀 Getting Started
 
 ### Prerequisites
