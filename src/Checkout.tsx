@@ -11,6 +11,7 @@ import {
   Payment,
   OrderConfirmationData
 } from './types'
+import { User } from './App'
 
 // types
 export type CurrentStep = 'shipping' | 'payment' | 'review'
@@ -31,6 +32,7 @@ export type CheckoutProps = {
     isOpen: boolean
     onClose: () => void
     onOrderComplete: (orderData: OrderConfirmationData) => void
+    user: User | null
 }
 
 export type ShippingFormProps = {
@@ -52,7 +54,7 @@ export type ReviewFormProps = {
 }
 
 // components
-const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose, onOrderComplete }) => {
+const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose, onOrderComplete, user }) => {
     const { state, clearCart } = useCart()
     const [currentStep, setCurrentStep] = useState<CurrentStep>('shipping')
     const [isProcessing, setIsProcessing] = useState(false)
@@ -60,7 +62,7 @@ const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose, onOrderComplete })
         firstName: '',
         lastName: '',
         email: '',
-        phoneNumber: '',
+        phone: '',
         addressLine1: '',
         city: '',
         state: '',
@@ -107,6 +109,7 @@ const Checkout: React.FC<CheckoutProps> = ({ isOpen, onClose, onOrderComplete })
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user?.token}`
             },
             body: JSON.stringify(orderData)
         })
@@ -225,15 +228,15 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ shippingInfo, setShippingIn
         </div>
 
         <div className={styles.formGroup}>
-            <label htmlFor='phoneNumber'>Phone Number *</label>
+            <label htmlFor='phone'>Phone Number *</label>
             <input
                 type='tel'
-                id='phoneNumber'
-                value={shippingInfo.phoneNumber}
-                onChange={(e) => setShippingInfo({ ...shippingInfo, phoneNumber: e.target.value })}
-                className={errors.phoneNumber ? styles.error : ''}
+                id='phone'
+                value={shippingInfo.phone}
+                onChange={(e) => setShippingInfo({ ...shippingInfo, phone: e.target.value })}
+                className={errors.phone ? styles.error : ''}
             />
-            {errors.phoneNumber && <span className={styles.errorMessage}>{errors.phoneNumber}</span>}
+            {errors.phone && <span className={styles.errorMessage}>{errors.phone}</span>}
         </div>
 
         <div className={styles.formGroup}>
@@ -489,8 +492,8 @@ const validateShippingInfo = (shippingInfo: ShippingInfo): Errors => {
     if (!shippingInfo.lastName.trim()) errors.lastName = 'Last name is required'
     if (!shippingInfo.email.trim()) errors.email = 'Email is required'
     else if (!/\S+@\S+\.\S+/.test(shippingInfo.email)) errors.email = 'Email is invalid'
-    if (!shippingInfo.phoneNumber.trim()) errors.phoneNumber = 'Phone number is required'
-    else if (!/^\d{10}$/.test(shippingInfo.phoneNumber)) errors.phoneNumber = 'Invalid phone number format'
+    if (!shippingInfo.phone.trim()) errors.phone = 'Phone number is required'
+    else if (!/^\d{10}$/.test(shippingInfo.phone)) errors.phone = 'Invalid phone number format'
     if (!shippingInfo.addressLine1.trim()) errors.addressLine1 = 'Address is required'
     if (!shippingInfo.city.trim()) errors.city = 'City is required'
     if (!shippingInfo.state.trim()) errors.state = 'State is required'
@@ -559,7 +562,7 @@ const getOrderData = (state: CartState, shippingInfo: ShippingInfo, paymentInfo:
         return  {
             customerEmail: shippingInfo.email,
             customerName: `${shippingInfo.firstName} ${shippingInfo.lastName}`,
-            customerPhone: shippingInfo.phoneNumber,
+            customerPhone: shippingInfo.phone,
             orderItems,
             shipping: shippingInfo,
             payment,

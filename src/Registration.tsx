@@ -1,28 +1,33 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
-import styles from './Login.module.css'
+import styles from './Registration.module.css'
 import config from './config'
-import { User } from './App'
 
 interface FormData {
+  firstName: string
+  lastName: string
   email: string
   password: string
 }
 
 interface Errors {
+  firstName?: string
+  lastName?: string
   email?: string
   password?: string
   general?: string
 }
 
-interface LoginProps {
-  onLogin: (loginData: User) => void
-  onShowRegistration: () => void
+interface RegistrationProps {
+  onRegistration: () => void
+  onBackToLogin: () => void
 }
 
-function Login({ onLogin, onShowRegistration }: LoginProps) {
+function Registration({ onRegistration, onBackToLogin }: RegistrationProps) {
   const [formData, setFormData] = useState<FormData>({
-    email: process.env.NODE_ENV === 'development' ? 'aaa@bbb.ccc' : '',
-    password: process.env.NODE_ENV === 'development' ? '123456' : ''
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: ''
   })
   const [errors, setErrors] = useState<Errors>({})
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -44,6 +49,14 @@ function Login({ onLogin, onShowRegistration }: LoginProps) {
 
   const validateForm = (): boolean => {
     const newErrors: Errors = {}
+    
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'First name is required'
+    }
+    
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'Last name is required'
+    }
     
     if (!formData.email) {
       newErrors.email = 'Email is required'
@@ -71,23 +84,17 @@ function Login({ onLogin, onShowRegistration }: LoginProps) {
     setIsLoading(true)
     
     try {
-      const response = await fetch(`${config.apiBaseUrl}/auth/login`, {
+      await fetch(`${config.apiBaseUrl}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData)
       })
-      const data = await response.json()
-      onLogin({
-        email: data.user.email,
-        token: data.access_token,
-        firstName: data.user.firstName,
-        lastName: data.user.lastName
-      })
+      onRegistration()
     } catch (error) {
-      console.error('Login error:', error)
-      setErrors({ general: 'Login failed. Please try again.' })
+      console.error('Registration error:', error)
+      setErrors({ general: 'Registration failed. Please try again.' })
     } finally {
       setIsLoading(false)
     }
@@ -97,8 +104,8 @@ function Login({ onLogin, onShowRegistration }: LoginProps) {
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.header}>
-          <h1>Welcome Back</h1>
-          <p>Sign in to your account</p>
+          <h1>Create Account</h1>
+          <p>Sign up to get started</p>
         </div>
         
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -107,6 +114,40 @@ function Login({ onLogin, onShowRegistration }: LoginProps) {
               {errors.general}
             </div>
           )}
+          
+          <div className={styles.formRow}>
+            <div className={styles.formGroup}>
+              <label htmlFor="firstName">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                placeholder="Enter your first name"
+                className={errors.firstName ? styles.error : ''}
+              />
+              {errors.firstName && (
+                <span className={styles.errorMessage}>{errors.firstName}</span>
+              )}
+            </div>
+            
+            <div className={styles.formGroup}>
+              <label htmlFor="lastName">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                placeholder="Enter your last name"
+                className={errors.lastName ? styles.error : ''}
+              />
+              {errors.lastName && (
+                <span className={styles.errorMessage}>{errors.lastName}</span>
+              )}
+            </div>
+          </div>
           
           <div className={styles.formGroup}>
             <label htmlFor="email">Email</label>
@@ -145,17 +186,16 @@ function Login({ onLogin, onShowRegistration }: LoginProps) {
             className={styles.button}
             disabled={isLoading}
           >
-            {isLoading ? 'Signing in...' : 'Sign In'}
+            {isLoading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
         
         <div className={styles.footer}>
-          <p>Don't have an account? <button onClick={onShowRegistration} className={styles.link}>Sign up</button></p>
-          <a href="#" className={styles.link}>Forgot password?</a>
+          <p>Already have an account? <button onClick={onBackToLogin} className={styles.link}>Sign in</button></p>
         </div>
       </div>
     </div>
   )
 }
 
-export default Login
+export default Registration

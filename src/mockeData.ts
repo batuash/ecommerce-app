@@ -5,7 +5,7 @@ export const mockedShippingInfo = {
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@example.com',
-    phoneNumber: '5551234567',
+    phone: '5551234567',
     addressLine1: '123 Main St',
     city: 'Anytown',
     state: 'CA',

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useCart } from './CartContext'
 import styles from './ProductList.module.css'
 import config from './config'
+import { User } from './App'
 
 interface Product {
   id: number
@@ -9,18 +10,28 @@ interface Product {
   price: number
 }
 
-function ProductList() {
+function ProductList({ user }: { user: User | null }) {
   const { addItem, state } = useCart()
   const [products, setProducts] = useState<Product[]>([])
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch(`${config.apiBaseUrl}/products`)
+      const response = await fetch(`${config.apiBaseUrl}/products`, {
+        headers: {
+          'Authorization': `Bearer ${user?.token}`
+        }
+      })
       const data = await response.json()
       setProducts(data)
     }
+
+    if (!user) {
+      return
+    }
+
     fetchProducts()
-  }, [])
+
+  }, [user])
   
   const formatPrice = (price: number): string => {
     return new Intl.NumberFormat('en-US', {

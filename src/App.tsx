@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import Login from './Login.tsx'
+import Registration from './Registration.tsx'
 import ProductList from './ProductList.tsx'
 import Cart from './Cart.tsx'
 import Checkout from './Checkout.tsx'
@@ -9,30 +10,75 @@ import OrderConfirmation from './OrderConfirmation.tsx'
 import { CartProvider, useCart } from './CartContext'
 import { OrderConfirmationData } from './types'
 import styles from './App.module.css'
+import { Snackbar, Alert } from '@mui/material'
 
-interface User {
-  email: string
-  password: string
+export interface User {
+  email: string,
+  token?: string,
+  firstName?: string,
+  lastName?: string
 }
 
 // TODO: add translation
+// TODO: add protected routes
+// TODO: add named pages for navigation instead of using a flag
+// TODO: add loading indicators
+// TODO: add order history
 function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
   const [user, setUser] = useState<User | null>(null)
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false)
   const [orderData, setOrderData] = useState<OrderConfirmationData | null>(null)
+  const [showRegistration, setShowRegistration] = useState<boolean>(false)
+  const [showSnackbar, setShowSnackbar] = useState<boolean>(false)
   const { state } = useCart()
 
-  // TODO: add proper login logic
+  // Check for existing token in localStorage on app initialization
+  useEffect(() => {
+    const savedUser = localStorage.getItem('userData')
+    
+    if (savedUser) {
+      try {
+        const userData = JSON.parse(savedUser)
+        setUser(userData)
+        setIsLoggedIn(true)
+      } catch (error) {
+        console.error('Error parsing saved user data:', error)
+        // Clear invalid data
+        localStorage.removeItem('userData')
+      }
+    }
+  }, [])
+
   const handleLogin = (loginData: User): void => {
     setUser(loginData)
     setIsLoggedIn(true)
+    setShowRegistration(false)
+    
+    // Save token and user data to localStorage
+    localStorage.setItem('userData', JSON.stringify(loginData))
+  }
+
+  const handleRegistration = (): void => {
+    setShowSnackbar(true)
+    setShowRegistration(false)
+  }
+
+  const handleBackToLogin = (): void => {
+    setShowRegistration(false)
+  }
+
+  const handleShowRegistration = (): void => {
+    setShowRegistration(true)
   }
 
   const handleLogout = (): void => {
     setUser(null)
     setIsLoggedIn(false)
+    
+    // Clear localStorage
+    localStorage.removeItem('userData')
   }
 
   const handleCheckout = (): void => {
@@ -49,9 +95,28 @@ function AppContent() {
     setOrderData(null)
   }
 
-  // Show login page if not logged in
+  // Show login or registration page if not logged in
   if (!isLoggedIn) {
-    return <Login onLogin={handleLogin} />
+    if (showRegistration) {
+      return <Registration onRegistration={handleRegistration} onBackToLogin={handleBackToLogin} />
+    }
+    return <>
+      <Login onLogin={handleLogin} onShowRegistration={handleShowRegistration} />
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={5000}
+        onClose={() => setShowSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setShowSnackbar(false)}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          Registration successful! Welcome to our store.
+        </Alert>
+      </Snackbar>
+    </>    
   }
 
   // Show main app content if logged in
@@ -59,7 +124,7 @@ function AppContent() {
     <>
       <div className={styles.appHeader}>
         <div className={styles.userInfo}>
-          <span>Welcome, {user?.email}</span>
+          <span>Welcome, {user?.firstName ? `${user.firstName} ${user.lastName}` : user?.email}</span>
           <button onClick={handleLogout} className={styles.logoutButton}>
             Logout
           </button>
@@ -76,18 +141,10 @@ function AppContent() {
       
       <div className={styles.mainContent}>
         <div className={styles.welcomeSection}>
-          <div>
-            <a href="https://vite.dev" target="_blank">
-              <img src={viteLogo} className="logo" alt="Vite logo" />
-            </a>
-            <a href="https://react.dev" target="_blank">
-              <img src={reactLogo} className="logo react" alt="React logo" />
-            </a>
-          </div>
           <h1>Welcome to Our Store</h1>
         </div>
         
-        <ProductList />
+        <ProductList user={user}/>
       </div>
 
       <Cart 
@@ -100,6 +157,7 @@ function AppContent() {
         isOpen={isCheckoutOpen} 
         onClose={() => setIsCheckoutOpen(false)}
         onOrderComplete={handleOrderComplete}
+        user={user}
       />
       
       {orderData && (

@@ -39,7 +39,7 @@ export type ShippingInfo = {
     firstName: string
     lastName: string
     email: string
-    phoneNumber: string
+    phone: string
     addressLine1: string
     city: string
     state: string
